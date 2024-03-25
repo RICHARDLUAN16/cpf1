@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificador de CPF</title>
+  <!-- Adicione o link para o Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container {
+      max-width: 500px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Verificador de CPF</h2>
+  <form>
+    <div class="form-group">
+      <label for="cpf">Digite o CPF:</label>
+      <input type="text" class="form-control" id="cpf" placeholder="Digite apenas números">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="verificarCPF()">Verificar</button>
+  </form>
+  <div id="resultado" class="mt-3"></div>
+</div>
+
+<script>
+  function verificarCPF() {
+    var cpf = document.getElementById("cpf").value.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+    if (cpf.length !== 11 || !validarDigitosCPF(cpf)) {
+      document.getElementById("resultado").innerHTML = '<div class="alert alert-danger" role="alert">CPF inválido</div>';
+    } else {
+      document.getElementById("resultado").innerHTML = '<div class="alert alert-success" role="alert">CPF válido</div>';
+    }
+  }
+
+  function validarDigitosCPF(cpf) {
+    var soma = 0;
+    var resto;
+
+    for (var i = 1; i <= 9; i++) {
+      soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+
+    if ((resto == 10) || (resto == 11)) {
+      resto = 0;
+    }
+    if (resto != parseInt(cpf.substring(9, 10))) {
+      return false;
+    }
+
+    soma = 0;
+    for (var i = 1; i <= 10; i++) {
+      soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    }
+    resto = (soma * 10) % 11;
+
+    if ((resto == 10) || (resto == 11)) {
+      resto = 0;
+    }
+    if (resto != parseInt(cpf.substring(10, 11))) {
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+</body>
+</html>
